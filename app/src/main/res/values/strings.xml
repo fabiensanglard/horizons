@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Sunset</string>
+
+    <string name="wallpapers">Bokeh Wallpapers</string>
+    <!-- Wallpaper showing Bokeh -->
+    <string name="bokeh">Bokeh Rainbow</string>
+    <string name="bokeh_desc">Translucent fading circles with rainbow colors</string>
+</resources>
