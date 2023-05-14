@@ -24,16 +24,60 @@ import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
+import android.os.Handler;
+import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
-public class BokehRainbowWallpaper extends AnimationWallpaper {
+import androidx.annotation.NonNull;
+
+public class SunsetWallpaper extends WallpaperService {
+
+	private void log(@NonNull String msg) {
+	    System.out.println(msg);
+	}
 
 	@Override
 	public Engine onCreateEngine() {
+		log("onCreateEngine");
 		return new BokehEngine();
 	}
 
-	class BokehEngine extends AnimationEngine {
+	class BokehEngine extends Engine {
+
+		private Handler mHandler = new Handler();
+
+		private boolean mVisible;
+
+		@Override
+		public void onDestroy() {
+			super.onDestroy();
+		}
+
+		@Override
+		public void onVisibilityChanged(boolean visible) {
+			log("onVisibilityChanged visible=" + visible);
+			mVisible = visible;
+			if (visible) {
+				scheduleRedraw();
+			}
+		}
+
+
+		@Override
+		public void onSurfaceDestroyed(SurfaceHolder holder) {
+			log("onSurfaceDestroyed");
+			super.onSurfaceDestroyed(holder);
+			mVisible = false;
+		}
+
+
+		protected void scheduleRedraw() {
+			log("scheduleRedraw");
+			if (mVisible) {
+				mHandler.postDelayed(() -> drawFrame(), 1 );
+			}
+		}
+
 		int offsetX;
 		int offsetY;
 		int height;
@@ -43,15 +87,17 @@ public class BokehRainbowWallpaper extends AnimationWallpaper {
 		private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
 			@Override
 			public void onReceive(Context ctxt, Intent intent) {
-				int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-				int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-				float batteryPct = level * 100 / (float)scale;
-				scheduleRedraw();//drawFrame();
+				log("Battery event");
+//				int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+//				int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+//				float batteryPct = level * 100 / (float)scale;
+				scheduleRedraw();
 			}
 		};
 
 		@Override
 		public void onCreate(SurfaceHolder surfaceHolder) {
+			log("onCreate");
 			super.onCreate(surfaceHolder);
 
 			// By default we don't get touch events, so enable them.
@@ -63,7 +109,7 @@ public class BokehRainbowWallpaper extends AnimationWallpaper {
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format,
 				int width, int height) {
-
+			log("onSurfaceChanged");
 			this.height = height;
 			if (this.isPreview()) {
 				this.width = width;
@@ -72,23 +118,26 @@ public class BokehRainbowWallpaper extends AnimationWallpaper {
 			}
 			this.visibleWidth = width;
 
-			super.onSurfaceChanged(holder, format, width, height);
+			scheduleRedraw();
+			drawFrame();
 		}
 
 		@Override
 		public void onOffsetsChanged(float xOffset, float yOffset,
 				float xOffsetStep, float yOffsetStep, int xPixelOffset,
 				int yPixelOffset) {
+			log("onOffsetsChanged");
 			// store the offsets
 			this.offsetX = xPixelOffset;
 			this.offsetY = yPixelOffset;
 
-			super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep,
-					xPixelOffset, yPixelOffset);
+			scheduleRedraw();
+			drawFrame();
 		}
 
-		@Override
-		protected void drawFrame() {
+
+		private void drawFrame() {
+			log("drawFrame");
 			SurfaceHolder holder = getSurfaceHolder();
 
 			Canvas c = null;
@@ -115,18 +164,13 @@ public class BokehRainbowWallpaper extends AnimationWallpaper {
 
 
 		void draw(Canvas c) {
-
+			log("draw");
 			float batteryLevel = getBatteryLevel();
 			int img = getDrawableSunset(batteryLevel);
 
 			Drawable d = getResources().getDrawable(img, null);
 			d.setBounds(0, 0, visibleWidth, height);
 			d.draw(c);
-
-//			Drawable stars = getResources().getDrawable(R.drawable.stars2, null);
-//			stars.setBounds(0, 0, visibleWidth, height);
-//			stars.setAlpha((int) (120 * (1 - batteryLevel) ));
-//			stars.draw(c);
 		}
 
 	}

@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <service android:label="@string/horizon_wallpaper" android:name=".BokehRainbowWallpaper"
+        <service android:label="@string/horizon_wallpaper" android:name=".SunsetWallpaper"
             android:permission="android.permission.BIND_WALLPAPER"
             android:exported="true">
             <intent-filter>
