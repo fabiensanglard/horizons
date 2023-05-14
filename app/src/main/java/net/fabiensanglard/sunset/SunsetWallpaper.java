@@ -33,6 +33,9 @@ import androidx.annotation.NonNull;
 public class SunsetWallpaper extends WallpaperService {
 
 	private void log(@NonNull String msg) {
+		if (true) {
+			return;
+		}
 	    System.out.println(msg);
 	}
 
