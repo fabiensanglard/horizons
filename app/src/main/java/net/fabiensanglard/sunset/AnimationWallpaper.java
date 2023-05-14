@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sample.livewallpaper.bokehrainbow;
+package net.fabiensanglard.sunset;
 
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
@@ -24,36 +24,25 @@ public abstract class AnimationWallpaper extends WallpaperService {
 	protected abstract class AnimationEngine extends Engine {
 		private Handler mHandler = new Handler();
 
-		private Runnable mIteration = () -> {
-			iteration();
-			drawFrame();
-		};
-
 		private boolean mVisible;
 
 		@Override
 		public void onDestroy() {
 			super.onDestroy();
-			// stop the animation
-			mHandler.removeCallbacks(mIteration);
 		}
 
 		@Override
 		public void onVisibilityChanged(boolean visible) {
 			mVisible = visible;
 			if (visible) {
-				iteration();
-				drawFrame();
-			} else {
-				// stop the animation
-				mHandler.removeCallbacks(mIteration);
+				scheduleRedraw();
 			}
 		}
 
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format,
 				int width, int height) {
-			iteration();
+			scheduleRedraw();
 			drawFrame();
 		}
 
@@ -61,25 +50,21 @@ public abstract class AnimationWallpaper extends WallpaperService {
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
 			mVisible = false;
-			// stop the animation
-			mHandler.removeCallbacks(mIteration);
 		}
 
 		@Override
 		public void onOffsetsChanged(float xOffset, float yOffset,
 				float xOffsetStep, float yOffsetStep, int xPixelOffset,
 				int yPixelOffset) {
-			iteration();
+			scheduleRedraw();
 			drawFrame();
 		}
 
 		protected abstract void drawFrame();
 
-		protected void iteration() {
-			// Reschedule the next redraw in 40ms
-			mHandler.removeCallbacks(mIteration);
+		protected void scheduleRedraw() {
 			if (mVisible) {
-				mHandler.postDelayed(mIteration, 1000 );
+				mHandler.postDelayed(() -> drawFrame(), 1 );
 			}
 		}
 	}

@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Sunset</string>
-
-    <string name="wallpapers">Bokeh Wallpapers</string>
-    <!-- Wallpaper showing Bokeh -->
-    <string name="bokeh">Bokeh Rainbow</string>
-    <string name="bokeh_desc">Translucent fading circles with rainbow colors</string>
+    <string name="horizon_desc">Horizon color evolves with battery level</string>
+    <string name="horizon_wallpaper">Horizon Wallpaper replacement</string>
 </resources>

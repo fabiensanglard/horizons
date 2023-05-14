@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sunset"
-        tools:targetApi="31">
+        tools:targetApi="33">
 
         <activity
             android:name=".MainActivity"
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <service android:label="@string/bokeh" android:name="com.sample.livewallpaper.bokehrainbow.BokehRainbowWallpaper"
+        <service android:label="@string/horizon_wallpaper" android:name=".BokehRainbowWallpaper"
             android:permission="android.permission.BIND_WALLPAPER"
             android:exported="true">
             <intent-filter>
