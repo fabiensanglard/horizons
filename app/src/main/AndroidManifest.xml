@@ -32,7 +32,7 @@
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
             <meta-data android:name="android.service.wallpaper"
-                android:resource="@xml/bokeh" />
+                android:resource="@xml/sunset" />
         </service>
 
     </application>
