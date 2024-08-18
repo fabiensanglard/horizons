@@ -1,12 +1,10 @@
 # horizons
 
-This is the source code for a live wallpaper replacing the discontinued Horizon
-for Pixel 6 and Pixel 7 as featured in the article on [fabien.sanglard.net](https://fabiensanglard.net/sunset).
+This is the source code for a live wallpaper. It uses a battery listener to display an image matching the battery percentage as wallpaper.
 
 # Assets
 
-The assets are not provided for obvious legal reasons. To generate them, you will need your Pixel 5. Use
-this script to extract the background and put them in the `res` folder.
+The original intend was to mimic Pixel horizon wallpaper.  The assets are not provided. To generate them, you will need to extract them from your own Pixel (or emulator). Use this script to extract the background and put them in the `res` folder.
 
 ```
 adb shell settings put global stay_on_while_plugged_in 3
